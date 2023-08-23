@@ -1,0 +1,16 @@
+<View>
+    <Image name="image" value="$image" zoomControl="true" rotateControl="false" zoom="true" />
+    <RectangleLabels name="label" toName="image">
+        <Label value="helmet" background="#1201f9" />
+        <Label value="glove" background="#fc3903" />
+        <Label value="face shield" background="#16ff05" />
+        <Label value="protective sleeve" background="#fe01e0" />
+        <Label value="cover gloves" background="#FFA39E" />
+        <Label value="balaclava hood" background="#D4380D" />
+        <Label value="protective goggles" background="#FFC069" />
+        <Label value="flame retardant shirt" background="#AD8B00" />
+        <Label value="flame retardant pants" background="#D3F261" />
+        <Label value="security boot" background="#389E0D" />
+        <Label value="paratrooper belt and lanyard" background="#5CDBD3" />
+    </RectangleLabels>
+</View>
