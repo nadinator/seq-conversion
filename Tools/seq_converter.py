@@ -59,12 +59,14 @@ def open_file(filename):
     try:
         im_1 = fnv.file.ImagerFile(filename)
     except OSError as e:
-        print(f"The file {filename} could not be found.\n\tMake sure you call this program from the same folder as the file, or specify the full path of the file.")
+        print(
+            f"The file {filename} could not be found.\n\tMake sure you call this program from the same folder as the file, or specify the full path of the file."
+        )
         raise e
     except Exception as e:
         print(f"The file {filename} could not be opened by the ImagerFile module. Try restarting the program.")
         raise e
-    
+
     # Try to open two more for the other units
     try:
         im_2 = fnv.file.ImagerFile(filename)
@@ -74,11 +76,11 @@ def open_file(filename):
         raise e
 
     return im_1, im_2, im_3
-    
+
 
 def extract(filenames, output_format, output_folder):
-    """Extract the frames """
-    
+    """Extract the frames"""
+
     # List containing the frame files
     frames_list = []
 
@@ -101,11 +103,7 @@ def extract(filenames, output_format, output_folder):
             frame_3 = get_scaled_frame(im_3, i)
 
             # Concatenate the frames to have three channels
-            concated = (
-                np.array([frame_1, frame_2, frame_3])
-                .swapaxes(0, 2)
-                .swapaxes(1, 0)
-            )
+            concated = np.array([frame_1, frame_2, frame_3]).swapaxes(0, 2).swapaxes(1, 0)
 
             # Save the image
             frame_name = f"frame_{i}.{output_format}"
@@ -113,7 +111,8 @@ def extract(filenames, output_format, output_folder):
             result = cv2.imwrite(output_path, concated)
             if result is False:
                 print(f"Frame {i} could not be saved.")
-                
+
+            # Append file object to list
             with open(output_path) as f:
                 frames_list.append(f)
 
@@ -124,19 +123,20 @@ def extract(filenames, output_format, output_folder):
 
         return frames_list
 
+
 def get_scaled_frame(im, frame_i):
     # Initialize im.final
-    im.get_frame(frame_i)  
+    im.get_frame(frame_i)
 
     # Get statistics for normalizing
     im_min = min(im.final)
     im_max = max(im.final)
     im_range = im_max - im_min
-    
+
     # Reshape, normalize, and scale frame values to between 0-255
     frame = np.array(im.final, copy=False).reshape((im.height, im.width))
     frame_scaled = (((frame - im_min) / im_range) * 255).astype(np.uint16)
-    
+
     return frame_scaled
 
 
@@ -150,7 +150,9 @@ def check_length(supported_units):
     #         "This seq files supports less than two units, so it cannot be extracted into RGB frames because that requires three channels."
     #     )
     if len(supported_units) < 3:
-        raise Exception("This seq files supports less than three units, so it cannot be extracted into RGB frames because that requires three channels.")
+        raise Exception(
+            "This seq files supports less than three units, so it cannot be extracted into RGB frames because that requires three channels."
+        )
 
 
 def success():
