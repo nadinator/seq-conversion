@@ -78,6 +78,9 @@ def open_file(filename):
 
 def extract(filenames, output_format, output_folder):
     """Extract the frames """
+    
+    # List containing the frame files
+    frames_list = []
 
     # Repeat for each requested .seq file
     for filename in tqdm(filenames):
@@ -110,12 +113,16 @@ def extract(filenames, output_format, output_folder):
             result = cv2.imwrite(output_path, concated)
             if result is False:
                 print(f"Frame {i} could not be saved.")
+                
+            with open(output_path) as f:
+                frames_list.append(f)
 
         # Close the file readers
         im_1.close()
         im_2.close()
         im_3.close()
 
+        return frames_list
 
 def get_scaled_frame(im, frame_i):
     # Initialize im.final
