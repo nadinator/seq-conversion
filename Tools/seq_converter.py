@@ -1,7 +1,7 @@
 import os
 import argparse
 
-import cv2
+from PIL import Image
 import fnv
 import fnv.file
 import numpy as np
@@ -102,19 +102,21 @@ def extract(filenames, output_format, output_folder):
             frame_2 = get_scaled_frame(im_2, i)
             frame_3 = get_scaled_frame(im_3, i)
 
-            # Concatenate the frames to have three channels
+            # Concatenate the frames to get a single three-channel image
             concated = np.array([frame_1, frame_2, frame_3]).swapaxes(0, 2).swapaxes(1, 0)
 
-            # Save the image
-            frame_name = f"frame_{i}.{output_format}"
-            output_path = os.path.join(output_folder, frame_name)
-            result = cv2.imwrite(output_path, concated)
-            if result is False:
-                print(f"Frame {i} could not be saved.")
-
-            # Append file object to list
-            with open(output_path) as f:
-                frames_list.append(f)
+            # Save the frame
+            try:
+                frame_name = f"frame_{i}.{output_format}"
+                output_path = os.path.join(output_folder, frame_name)
+                image = Image.fromarray(concated)
+                image.save(output_path, format=output_format)
+            except Exception as e:
+                print(f"Frame {i} couldn't be saved")
+            else:
+                # Append file object to list
+                with open(output_path) as f:
+                    frames_list.append(f)
 
         # Close the file readers
         im_1.close()
